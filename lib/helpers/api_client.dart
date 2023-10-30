@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 final Dio dio = Dio(BaseOptions(
   //baseUrl: 'http://192.168.176.47/api-klinik/public/',
-  baseUrl: 'http://192.168.176.47/api-klinik/public/',
+  baseUrl: 'http://10.0.2.2/api-klinik/public/',
   connectTimeout: Duration(seconds: 60),
   receiveTimeout: Duration(seconds: 60),
 ));

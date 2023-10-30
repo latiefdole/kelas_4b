@@ -10,8 +10,8 @@ class LoginService {
     final Response response = await ApiClient().post('login', data);
     if (response.data != null) {
       await UserInfo().setToken("${response.data["token"]}");
-      await UserInfo().setUserID("${response.data["user"]["id"]}");
-      await UserInfo().setUsername("${response.data["user"]["email"]}");
+      await UserInfo().setUserID("${response.data["id"]}");
+      await UserInfo().setUsername("${response.data["email"]}");
       isLogin = true;
     }
     // if (username == 'admin' && password == 'admin') {
