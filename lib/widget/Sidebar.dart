@@ -5,9 +5,11 @@ import 'package:kelas_4b/ui/pasien/pasien_page.dart';
 import 'package:kelas_4b/ui/pegawai/pegawai_page.dart';
 import 'package:kelas_4b/ui/poli/poli_page.dart';
 
-class Sidebar extends StatelessWidget {
-  const Sidebar({Key? key}) : super(key: key);
+import '../helpers/user_info.dart';
 
+class Sidebar extends StatelessWidget {
+  Sidebar({Key? key}) : super(key: key);
+  final UserInfo userInfo = UserInfo();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -25,8 +27,7 @@ class Sidebar extends StatelessWidget {
           //   child:
           // ),
           const UserAccountsDrawerHeader(
-              currentAccountPicture:
-                  Image(image: AssetImage('../../img/logo.png')),
+              // currentAccountPicture: Image(image: AssetImage('../../img/logo.png')),
               accountName: Text("Admin"),
               accountEmail: Text("admin@admin.com")),
           ListTile(
@@ -66,14 +67,17 @@ class Sidebar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Logout'),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => Login(),
-              ));
+            leading: Icon(Icons.logout_rounded),
+            title: Text("Keluar"),
+            onTap: () async {
+              await userInfo.logout(); // Call the logout function
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+                (Route<dynamic> route) => false,
+              );
             },
-          ),
+          )
         ],
       ),
     );

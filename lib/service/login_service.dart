@@ -8,7 +8,9 @@ class LoginService {
     bool isLogin = false;
     var data = {"email": email, "password": password};
     final Response response = await ApiClient().post('login', data);
-    if (response.data != null) {
+    print("Login API Response: ${response.data}");
+
+    if (response.statusCode == 200) {
       await UserInfo().setToken("${response.data["token"]}");
       await UserInfo().setUserID("${response.data["id"]}");
       await UserInfo().setUsername("${response.data["email"]}");
