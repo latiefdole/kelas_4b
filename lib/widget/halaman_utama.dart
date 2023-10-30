@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Sidebar.dart';
 
 class HalamanUtama extends StatelessWidget {
   const HalamanUtama({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class HalamanUtama extends StatelessWidget {
       body: const Center(
         child: Text("Ini Merupakan Tampilan Home"),
       ),
+      drawer: Sidebar(),
     );
   }
 }
