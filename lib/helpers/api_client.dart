@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 
 final Dio dio = Dio(BaseOptions(
-  //baseUrl: 'http://192.168.176.47/api-klinik/public/',
-  baseUrl: 'http://10.0.2.2/api-klinik/public/',
+  baseUrl: 'http://192.168.0.248/api-klinik/public/',
+  //baseUrl: 'http://10.0.2.2/api-klinik/public/',
   connectTimeout: Duration(seconds: 60),
   receiveTimeout: Duration(seconds: 60),
 ));
@@ -17,7 +17,7 @@ class ApiClient {
     }
   }
 
-  Future<Response> post(String path, dynamic data) async {
+  Future<Response> post(String path, Map data) async {
     try {
       final response = await dio.post(Uri.encodeFull(path), data: data);
       return response;

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String TOKEN = "token";
 const String USER_ID = "userID";
 const String USERNAME = "username";
+const String NAMA = "nama";
 
 class UserInfo {
   Future setToken(String value) async {
@@ -33,6 +34,16 @@ class UserInfo {
   Future<String> getUsername() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getString(USERNAME).toString();
+  }
+
+  Future setNama(String value) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.setString(NAMA, value);
+  }
+
+  Future<String> getNama() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString(NAMA).toString();
   }
 
   Future<void> logout() async {

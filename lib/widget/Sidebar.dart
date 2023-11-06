@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kelas_4b/ui/Login.dart';
+import 'package:kelas_4b/ui/login.dart';
 import 'package:kelas_4b/widget/halaman_utama.dart';
 import 'package:kelas_4b/ui/pasien/pasien_page.dart';
 import 'package:kelas_4b/ui/pegawai/pegawai_page.dart';
@@ -26,10 +26,35 @@ class Sidebar extends StatelessWidget {
           //   ),
           //   child:
           // ),
-          const UserAccountsDrawerHeader(
-              // currentAccountPicture: Image(image: AssetImage('../../img/logo.png')),
-              accountName: Text("Admin"),
-              accountEmail: Text("admin@admin.com")),
+          UserAccountsDrawerHeader(
+            accountName: FutureBuilder<String>(
+              future: UserInfo().getNama(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text('Loading...'); // Handle loading state
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // Handle error
+                } else {
+                  final namaUser = snapshot.data;
+                  return Text("$namaUser");
+                }
+              },
+            ),
+            accountEmail: FutureBuilder<String>(
+              future: UserInfo().getUsername(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text('Loading...'); // Handle loading state
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // Handle error
+                } else {
+                  final userEmail = snapshot.data;
+                  return Text("$userEmail");
+                }
+              },
+            ),
+          ),
+
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
