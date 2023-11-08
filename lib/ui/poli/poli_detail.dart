@@ -30,22 +30,22 @@ class _PoliDetailState extends State<PoliDetail> {
             return Text(snapshot.error.toString());
           }
           if (snapshot.connectionState != ConnectionState.done) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
           if (!snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            return Text('Data Tidak Ditemukan');
+            return const Text('Data Tidak Ditemukan');
           }
           return Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Nama Poli : ${snapshot.data.namaPoli}",
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [_tombolUbah(), _tombolHapus()],
@@ -103,23 +103,23 @@ class _PoliDetailState extends State<PoliDetail> {
                           await PoliService()
                               .hapus(snapshot.data)
                               .then((value) {
-                            Navigator.pop(context);
+                            Navigator.of(context).pop();
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PoliPage()));
+                                    builder: (context) => const PoliPage()));
                           });
                         },
-                        child: const Text("YA"),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red),
+                        child: const Text("YA"),
                       )),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text("Tidak"),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                child: const Text("Tidak"),
               )
             ],
           );

@@ -39,7 +39,7 @@ class _PoliFormState extends State<PoliForm> {
   _tombolSimpan() {
     return ElevatedButton(
         onPressed: () async { //gunakan async untuk asyncronous dan await
-          Poli poli = new Poli(namaPoli: _namaPoliCtrl.text);
+          Poli poli = Poli(namaPoli: _namaPoliCtrl.text);
           await PoliService().simpan(poli).then((value) {
             Navigator.pushReplacement(
                 context,

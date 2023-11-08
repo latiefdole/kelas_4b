@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kelas_4b/models/poli.dart';
 import 'package:kelas_4b/ui/poli/poli_form.dart';
 import 'package:kelas_4b/ui/poli/poli_item.dart';
+import '../../widget/sidebar.dart';
 
 import '../../service/poli_service.dart';
 
 class PoliPage extends StatefulWidget {
-  const PoliPage({super.key});
-
-  @override
-  State<PoliPage> createState() => _PoliPageState();
+  const PoliPage({Key? key}) : super(key: key);
+  _PoliPageState createState() => _PoliPageState();
 }
 
 class _PoliPageState extends State<PoliPage> {
@@ -21,14 +20,15 @@ class _PoliPageState extends State<PoliPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Sidebar(),
       appBar: AppBar(
         title: const Text("Data Poli"),
         actions: [
-          ElevatedButton(
-            child: const Center(child: Text("Tambah Data")),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PoliForm()));
+          GestureDetector(
+            child: const SafeArea(child: Icon(Icons.add)),
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => PoliForm()));
             },
           )
         ],
@@ -40,13 +40,13 @@ class _PoliPageState extends State<PoliPage> {
             return Text(snapshot.error.toString());
           }
           if (snapshot.connectionState != ConnectionState.done) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
           if (!snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            return Text('Data Kosong');
+            return const Text('Data Kosong');
           }
 
           return ListView.builder(
@@ -57,7 +57,9 @@ class _PoliPageState extends State<PoliPage> {
           );
         },
       ),
-
+    );
+  }
+}
       // body: ListView(
       //   children: [
       //     PoliItem(poli: Poli(namaPoli: "Poli Anak")),
@@ -67,6 +69,6 @@ class _PoliPageState extends State<PoliPage> {
       //     PoliItem(poli: Poli(namaPoli: "Poli THT")),
       //   ],
       // ),
-    );
-  }
-}
+//     );
+//   }
+// }
