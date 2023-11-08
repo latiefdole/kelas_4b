@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import '../../models/poli.dart';
 import '../../service/poli_service.dart';
@@ -36,7 +38,7 @@ class _PoliUpdateFormState extends State<PoliUpdateForm> {
         child: Form(
           key: _formKey,
           child: Column(
-            children: [_fieldNamaPoli(), SizedBox(height: 20), _tombolSimpan()],
+            children: [_fieldNamaPoli(), const SizedBox(height: 20), _tombolSimpan()],
           ),
         ),
       ),
@@ -53,7 +55,7 @@ class _PoliUpdateFormState extends State<PoliUpdateForm> {
   _tombolSimpan() {
     return ElevatedButton(
         onPressed: () async {
-          Poli poli = new Poli(namaPoli: _namaPoliCtrl.text);
+          Poli poli = Poli(namaPoli: _namaPoliCtrl.text);
           String id = widget.poli.id.toString();
           await PoliService().ubah(poli, id).then((value) {
             Navigator.pop(context);

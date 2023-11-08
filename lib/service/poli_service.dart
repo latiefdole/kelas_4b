@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../helpers/api_client.dart';
 import '../models/poli.dart';
 
@@ -20,7 +21,9 @@ class PoliService {
   Future<Poli> ubah(Poli poli, String id) async {
     var data = poli.toJson();
     final Response response = await ApiClient().put('poli/$id', data);
-    print(response);
+    if (kDebugMode) {
+      print(response);
+    }
     Poli result = Poli.fromJson(response.data['data']);
     return result;
   }

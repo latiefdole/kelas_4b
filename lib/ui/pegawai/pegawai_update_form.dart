@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import '../../models/pegawai.dart';
 import 'pegawai_detail.dart';

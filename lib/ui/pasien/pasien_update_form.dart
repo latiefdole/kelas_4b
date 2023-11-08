@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import '../../models/pasien.dart';
 import 'pasien_detail.dart';
@@ -45,6 +47,7 @@ class _PasienUpdateFormState extends State<PasienUpdateForm> {
               _fieldTeleponPasien(),
               _fieldAlamatPasien(),
               _pembatas(),
+              _tombolSimpan()
             ],
           ),
         ),

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:kelas_4b/models/poli.dart';
 import 'package:kelas_4b/ui/poli/poli_form.dart';
@@ -8,6 +10,7 @@ import '../../service/poli_service.dart';
 
 class PoliPage extends StatefulWidget {
   const PoliPage({Key? key}) : super(key: key);
+  @override
   _PoliPageState createState() => _PoliPageState();
 }
 
@@ -28,7 +31,7 @@ class _PoliPageState extends State<PoliPage> {
             child: const SafeArea(child: Icon(Icons.add)),
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => PoliForm()));
+                  context, MaterialPageRoute(builder: (context) => const PoliForm()));
             },
           )
         ],

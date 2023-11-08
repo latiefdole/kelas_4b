@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:kelas_4b/models/pegawai.dart';
 import 'package:kelas_4b/ui/pegawai/pegawai_detail.dart';
