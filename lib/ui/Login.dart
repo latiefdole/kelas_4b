@@ -22,20 +22,20 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Login Admin",
+              const Text("Login Admin",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Center(
                 child: Form(
                     key: _formKey,
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width / 1.3,
                       child: Column(
                         children: [
                           _usernameTextField(),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           _passwordTextField(),
-                          SizedBox(height: 40),
+                          const SizedBox(height: 40),
                           _tombolLogin(),
                         ],
                       ),
@@ -50,31 +50,33 @@ class _LoginState extends State<Login> {
 
   Widget _usernameTextField() {
     return TextFormField(
-      decoration: InputDecoration(labelText: "Username"),
+      decoration: const InputDecoration(labelText: "Username"),
       controller: _usernameCtrl,
     );
   }
 
   Widget _passwordTextField() {
     return TextFormField(
-      decoration: InputDecoration(labelText: "Password"),
+      decoration: const InputDecoration(labelText: "Password"),
       obscureText: true,
       controller: _passwordCtrl,
     );
   }
 
   Widget _tombolLogin() {
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
-            child: Text("Login"),
+            child: const Text("Login"),
             onPressed: () async {
               String email = _usernameCtrl.text;
               String password = _passwordCtrl.text;
               await LoginService().login(email, password).then((value) {
                 if (value == true) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HalamanUtama()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HalamanUtama()));
                 } else {
                   AlertDialog alertDialog = AlertDialog(
                     content: const Text("Username atau Password Tidak Valid"),
@@ -83,9 +85,9 @@ class _LoginState extends State<Login> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text("OK"),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green),
+                        child: const Text("OK"),
                       )
                     ],
                   );
