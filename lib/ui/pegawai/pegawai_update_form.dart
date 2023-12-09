@@ -1,6 +1,8 @@
 // ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:kelas_4b/service/pegawai_service.dart';
 import '../../models/pegawai.dart';
 import 'pegawai_detail.dart';
 
@@ -20,17 +22,25 @@ class _PegawaiUpdateFormState extends State<PegawaiUpdateForm> {
   final _TeleponPegawaiCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  Future<Pegawai> getData() async {
+    Pegawai data = await PegawaiService().getById(widget.pegawai.id.toString());
+    setState(() {
+      //_namaPoliCtrl.text = data.namaPoli;
+      _namaPegawaiCtrl.text = data.namaPegawai;
+      _NipPegawaiCtrl.text = data.nip!;
+      _tanggalLahirCtrl.text = data.tanggalLahir;
+      _TeleponPegawaiCtrl.text = data.nomorTelepon;
+      _emailCtrl.text = data.email;
+      _passwordCtrl.text = data.password!;
+    });
+    return data;
+  }
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      _namaPegawaiCtrl.text = widget.pegawai.namaPegawai;
-      _NipPegawaiCtrl.text = widget.pegawai.nip!;
-      _tanggalLahirCtrl.text = widget.pegawai.tanggalLahir;
-      _TeleponPegawaiCtrl.text = widget.pegawai.nomorTelepon;
-      _emailCtrl.text = widget.pegawai.email;
-      _passwordCtrl.text = widget.pegawai.password!;
+      getData();
     });
   }
 
@@ -81,10 +91,29 @@ class _PegawaiUpdateFormState extends State<PegawaiUpdateForm> {
   _fieldTglLahirPegawai() {
     return TextField(
       decoration: const InputDecoration(
-          floatingLabelStyle: TextStyle(color: Colors.red),
-          labelText: "Tanggal Lahir",
-          hintText: "Input Tanggal Lahir"),
+        floatingLabelStyle: TextStyle(color: Colors.red),
+        labelText: "Tanggal Lahir",
+        hintText: "Input Tanggal Lahir",
+        icon: Icon(Icons.calendar_today),
+      ),
       controller: _tanggalLahirCtrl,
+
+      readOnly: true, //set it true, so that user will not able to edit text
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(
+                1990), //DateTime.now() - not to allow to choose before today.
+            lastDate: DateTime(2101));
+
+        if (pickedDate != null) {
+          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+          _tanggalLahirCtrl.text =
+              formattedDate; //set output date to TextField value.
+        }
+      },
     );
   }
 
@@ -122,19 +151,21 @@ class _PegawaiUpdateFormState extends State<PegawaiUpdateForm> {
 
   _tombolSimpan() {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           Pegawai pegawai = Pegawai(
               namaPegawai: _namaPegawaiCtrl.text,
               tanggalLahir: _tanggalLahirCtrl.text,
               nomorTelepon: _TeleponPegawaiCtrl.text,
               email: _emailCtrl.text,
               password: _passwordCtrl.text);
-
-          Navigator.pop(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PegawaiDetail(pegawai: pegawai)));
+          String id = widget.pegawai.id.toString();
+          await PegawaiService().ubah(pegawai, id).then((value) {
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PegawaiDetail(pegawai: value)));
+          });
         },
         child: const Text("Simpan Perubahan"));
   }

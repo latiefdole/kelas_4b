@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/poli.dart';
+import '../../widget/sidebar.dart';
 import '../../service/poli_service.dart';
 import 'poli_page.dart';
 import 'poli_update_form.dart';
@@ -23,6 +24,7 @@ class _PoliDetailState extends State<PoliDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Poli Detail")),
+      drawer: Sidebar(),
       body: StreamBuilder(
         stream: getData(),
         builder: (context, AsyncSnapshot snapshot) {
@@ -76,17 +78,18 @@ class _PoliDetailState extends State<PoliDetail> {
 
   _tombolUbah() {
     return StreamBuilder(
-        stream: getData(),
-        builder: (context, AsyncSnapshot snapshot) => ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PoliUpdateForm(poli: snapshot.data)));
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-            child: const Text("Ubah")));
+      stream: getData(),
+      builder: (context, AsyncSnapshot snapshot) => ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PoliUpdateForm(poli: snapshot.data)));
+        },
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+        child: const Text("Ubah"),
+      ),
+    );
   }
 
   _tombolHapus() {
@@ -128,4 +131,53 @@ class _PoliDetailState extends State<PoliDetail> {
         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
         child: const Text("Hapus"));
   }
+
+//    _tombolHapus() {
+//     return ElevatedButton(
+//         onPressed: () async {
+//           AlertDialog alertDialog = AlertDialog(
+//             content: const Text("Yakin ingin menghapus data ini?"),
+//             actions: [
+//               // tombol ya
+//               StreamBuilder(
+//                 stream: getData(),
+//                 builder: (context, AsyncSnapshot snapshot) => ElevatedButton(
+//                   onPressed: () {
+//                     Navigator.of(context)
+//                         .pop(); // Close the confirmation dialog
+//                     _hapusData(snapshot.data);
+//                     // Call the _hapusData function
+//                     Navigator.pushReplacement(
+//                       context,
+//                       MaterialPageRoute(
+//                         builder: (context) => const PoliPage(),
+//                       ),
+//                     );
+//                   },
+//                   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+//                   child: const Text("YA"),
+//                 ),
+//               ),
+//               ElevatedButton(
+//                 onPressed: () {
+//                   Navigator.pop(context);
+//                 },
+//                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+//                 child: const Text("Tidak"),
+//               )
+//             ],
+//           );
+//           showDialog(context: context, builder: (context) => alertDialog);
+//         },
+//         style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+//         child: const Text("Hapus"));
+//   }
+
+// // Function to handle data deletion and navigation
+//   _hapusData(data) async {
+//     await PoliService().hapus(data);
+//     await Future.delayed(Duration.zero);
+//     if (!context.mounted) return;
+//     Navigator.of(context).pop(); // Close the confirmation dialog
+//   }
 }

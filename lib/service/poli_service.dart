@@ -34,9 +34,13 @@ class PoliService {
     return result;
   }
 
-  Future<Poli> hapus(Poli poli) async {
+  Future<bool> hapus(Poli poli) async {
     final Response response = await ApiClient().delete('poli/${poli.id}');
-    Poli result = Poli.fromJson(response.data['data']);
-    return result;
+    //Poli result = Poli.fromJson(response.data['data']);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -7,6 +7,8 @@ class LoginService {
     bool isLogin = false;
     var data = {"email": email, "password": password};
     final Response response = await ApiClient().post('login', data);
+    //print(data);
+    //print(response);
     final responseJson = response.data as Map<String, dynamic>;
     final code = responseJson['code'];
 

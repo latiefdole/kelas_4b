@@ -1,7 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../models/pasien.dart';
+import '../../service/pasien_service.dart';
 import 'pasien_detail.dart';
 
 class PasienUpdateForm extends StatefulWidget {
@@ -19,16 +21,23 @@ class _PasienUpdateFormState extends State<PasienUpdateForm> {
   final _tanggalLahirCtrl = TextEditingController();
   final _teleponPasienCtrl = TextEditingController();
   final _alamatPasienCtrl = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
+  Future<Pasien> getData() async {
+    Pasien data = await PasienService().getById(widget.pasien.id.toString());
     setState(() {
       _namaPasienCtrl.text = widget.pasien.namaPasien;
       _noRMCtrl.text = widget.pasien.nomorRM;
       _tanggalLahirCtrl.text = widget.pasien.tanggalLahir;
       _teleponPasienCtrl.text = widget.pasien.nomorTelepon;
       _alamatPasienCtrl.text = widget.pasien.alamat;
+    });
+    return data;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      getData();
     });
   }
 
@@ -78,10 +87,29 @@ class _PasienUpdateFormState extends State<PasienUpdateForm> {
   _fieldTglLahirPasien() {
     return TextField(
       decoration: const InputDecoration(
-          floatingLabelStyle: TextStyle(color: Colors.red),
-          labelText: "Tanggal Lahir",
-          hintText: "Input Tanggal Lahir"),
+        floatingLabelStyle: TextStyle(color: Colors.red),
+        labelText: "Tanggal Lahir",
+        hintText: "Input Tanggal Lahir",
+        icon: Icon(Icons.calendar_today),
+      ),
       controller: _tanggalLahirCtrl,
+
+      readOnly: true, //set it true, so that user will not able to edit text
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(
+                1990), //DateTime.now() - not to allow to choose before today.
+            lastDate: DateTime(2101));
+
+        if (pickedDate != null) {
+          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+          _tanggalLahirCtrl.text =
+              formattedDate; //set output date to TextField value.
+        }
+      },
     );
   }
 
@@ -111,18 +139,21 @@ class _PasienUpdateFormState extends State<PasienUpdateForm> {
 
   _tombolSimpan() {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           Pasien pasien = Pasien(
               namaPasien: _namaPasienCtrl.text,
               nomorRM: _noRMCtrl.text,
               alamat: _alamatPasienCtrl.text,
               nomorTelepon: _teleponPasienCtrl.text,
               tanggalLahir: _tanggalLahirCtrl.text);
-          Navigator.pop(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PasienDetail(pasien: pasien)));
+          String id = widget.pasien.id.toString();
+          await PasienService().ubah(pasien, id).then((value) {
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PasienDetail(pasien: value)));
+          });
         },
         child: const Text("Simpan Perubahan"));
   }

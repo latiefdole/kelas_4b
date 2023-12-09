@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kelas_4b/models/pasien.dart';
 import 'package:kelas_4b/ui/pasien/pasien_detail.dart';
+
+import '../../service/pasien_service.dart';
 
 class PasienForm extends StatefulWidget {
   const PasienForm({Key? key}) : super(key: key);
@@ -62,10 +65,29 @@ class _PasienFormState extends State<PasienForm> {
   _fieldTglLahirPasien() {
     return TextField(
       decoration: const InputDecoration(
-          floatingLabelStyle: TextStyle(color: Colors.red),
-          labelText: "Tanggal Lahir",
-          hintText: "Input Tanggal Lahir"),
+        floatingLabelStyle: TextStyle(color: Colors.red),
+        labelText: "Tanggal Lahir",
+        hintText: "Input Tanggal Lahir",
+        icon: Icon(Icons.calendar_today),
+      ),
       controller: _tanggalLahirCtrl,
+
+      readOnly: true, //set it true, so that user will not able to edit text
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(
+                1990), //DateTime.now() - not to allow to choose before today.
+            lastDate: DateTime(2101));
+
+        if (pickedDate != null) {
+          String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+            _tanggalLahirCtrl.text = formattedDate; //set output date to TextField value.
+
+        }
+      },
     );
   }
 
@@ -95,17 +117,19 @@ class _PasienFormState extends State<PasienForm> {
 
   _tombolSimpan() {
     return ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           Pasien pasien = Pasien(
               namaPasien: _namaPasienCtrl.text,
               nomorRM: _noRMCtrl.text,
               alamat: _alamatPasienCtrl.text,
               nomorTelepon: _teleponPasienCtrl.text,
               tanggalLahir: _tanggalLahirCtrl.text);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PasienDetail(pasien: pasien)));
+          await PasienService().simpan(pasien).then((value) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PasienDetail(pasien: value)));
+          });
         },
         child: const Text("Simpan"));
   }
