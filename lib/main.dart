@@ -10,7 +10,7 @@ Future<void> main() async {
   runApp(MaterialApp(
     title: "Klinik APP",
     debugShowCheckedModeBanner: false,
-    home: token == null ? const Login() : const HalamanUtama(),
+    home: token == null ? const Login() : const Beranda(),
   ));
 }
 

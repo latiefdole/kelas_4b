@@ -57,7 +57,7 @@ class Sidebar extends StatelessWidget {
             title: const Text('Home'),
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const HalamanUtama()),
+                MaterialPageRoute(builder: (context) => const Beranda()),
               );
             },
           ),

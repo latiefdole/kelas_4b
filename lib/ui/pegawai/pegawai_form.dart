@@ -1,6 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kelas_4b/models/pegawai.dart';
 import 'package:kelas_4b/ui/pegawai/pegawai_detail.dart';
@@ -32,6 +36,43 @@ class _PegawaiFormState extends State<PegawaiForm> {
   //     _obscureText = !_obscureText;
   //   });
   // }
+  File? _pickedImage; // Track the picked image
+
+  Future<File?> pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      return File(image.path);
+    }
+    return null;
+  }
+
+  Future<void> uploadImage(File imageFile) async {
+    try {
+      String fileName = imageFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          imageFile.path,
+          filename: fileName,
+        ),
+      });
+
+      // Replace 'your_upload_url' with your actual API endpoint for uploading images
+      Response response = await Dio().post(
+        'your_upload_url',
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        // Image uploaded successfully, handle the response
+      } else {
+        // Handle any errors if the upload fails
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the upload process
+      print('Upload error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +89,7 @@ class _PegawaiFormState extends State<PegawaiForm> {
                 _fieldTeleponPegawai(),
                 _fieldEmailPegawai(),
                 _fieldPassword(),
+                _imagePickerButton(),
                 _pembatas(),
                 _tombolSimpan()
               ],
@@ -73,6 +115,31 @@ class _PegawaiFormState extends State<PegawaiForm> {
           labelText: "Nama Pegawai",
           hintText: "Input Nama Pegawai"),
       controller: _namaPegawaiCtrl,
+    );
+  }
+
+  _imagePickerButton() {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            File? pickedImage = await pickImage();
+            if (pickedImage != null) {
+              setState(() {
+                _pickedImage = pickedImage; // Update the picked image
+              });
+              await uploadImage(pickedImage);
+            }
+          },
+          child: const Text('Pick and Upload Image'),
+        ),
+        if (_pickedImage != null)
+          Image.file(
+            _pickedImage!,
+            height: 100, // Set desired height for the preview image
+            width: 100, // Set desired width for the preview image
+          ),
+      ],
     );
   }
 

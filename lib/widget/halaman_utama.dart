@@ -1,8 +1,43 @@
 import 'package:flutter/material.dart';
+import '../models/pasien.dart';
+import '../models/poli.dart';
+import '../service/pasien_service.dart';
+import '../service/pegawai_service.dart';
+import '../models/pegawai.dart';
+import '../service/poli_service.dart';
+import '../ui/pasien/pasien_page.dart';
+import '../ui/pegawai/pegawai_page.dart';
+import '../ui/poli/poli_page.dart';
 import 'sidebar.dart';
 
-class HalamanUtama extends StatelessWidget {
-  const HalamanUtama({Key? key}) : super(key: key);
+class Beranda extends StatefulWidget {
+  const Beranda({Key? key}) : super(key: key);
+
+  @override
+  _BerandaState createState() => _BerandaState();
+}
+
+class _BerandaState extends State<Beranda> {
+  List<Pegawai> totaluser = [];
+  List<Pasien> totalpasien = [];
+  List<Poli> totalpoli = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final List<Pegawai> fetchedUsers = await PegawaiService().listData();
+    final List<Pasien> fetchedPasien = await PasienService().listData();
+    final List<Poli> fetchedPoli = await PoliService().listData();
+    setState(() {
+      totaluser = fetchedUsers;
+      totalpasien = fetchedPasien;
+      totalpoli = fetchedPoli;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +49,20 @@ class HalamanUtama extends StatelessWidget {
         crossAxisCount: 2,
         children: [
           DashboardCard(
-            title: 'Sales',
-            value: '100K',
-            icon: Icons.attach_money,
+            title: 'Total Poli',
+            value: totalpoli.length.toString(),
+            icon: Icons.local_hospital,
             color: Colors.blue,
           ),
           DashboardCard(
-            title: 'Orders',
-            value: '50',
-            icon: Icons.shopping_cart,
+            title: 'Total Pasien',
+            value: totalpasien.length.toString(),
+            icon: Icons.health_and_safety,
             color: Colors.orange,
           ),
           DashboardCard(
-            title: 'Users',
-            value: '500',
+            title: 'Total Pegawai',
+            value: totaluser.length.toString(),
             icon: Icons.person,
             color: Colors.green,
           ),
@@ -59,22 +94,51 @@ class DashboardCard extends StatelessWidget {
     required this.color,
   }) : super(key: key);
 
+  void navigateToPage(BuildContext context) {
+    switch (title) {
+      case 'Total Poli':
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PoliPage(),
+        ));
+        break;
+      case 'Total Pasien':
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PasienPage(),
+        ));
+        break;
+      case 'Total Pegawai':
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PegawaiPage(),
+        ));
+        break;
+      // Add more cases for other cards if needed
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      margin: EdgeInsets.all(16),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          size: 40,
-          color: color,
+    return GestureDetector(
+      onTap: () => navigateToPage(context),
+      child: Card(
+        elevation: 6,
+        margin: EdgeInsets.all(16),
+        child: ListTile(
+          leading: Icon(
+            icon,
+            size: 40,
+            color: color,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            value,
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
         ),
-        title: Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(value),
       ),
     );
   }

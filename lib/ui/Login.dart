@@ -76,10 +76,8 @@ class _LoginState extends State<Login> {
               String password = _passwordCtrl.text;
               await LoginService().login(email, password).then((value) {
                 if (value == true) {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HalamanUtama()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const Beranda()));
                 } else {
                   AlertDialog alertDialog = AlertDialog(
                     content: const Text("Username atau Password Tidak Valid"),
