@@ -66,7 +66,7 @@ class _BerandaState extends State<Beranda> {
             icon: Icons.person,
             color: Colors.green,
           ),
-          DashboardCard(
+          const DashboardCard(
             title: 'Messages',
             value: '10',
             icon: Icons.message,
@@ -98,17 +98,17 @@ class DashboardCard extends StatelessWidget {
     switch (title) {
       case 'Total Poli':
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PoliPage(),
+          builder: (context) => const PoliPage(),
         ));
         break;
       case 'Total Pasien':
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PasienPage(),
+          builder: (context) => const PasienPage(),
         ));
         break;
       case 'Total Pegawai':
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PegawaiPage(),
+          builder: (context) => const PegawaiPage(),
         ));
         break;
       // Add more cases for other cards if needed
@@ -123,7 +123,7 @@ class DashboardCard extends StatelessWidget {
       onTap: () => navigateToPage(context),
       child: Card(
         elevation: 6,
-        margin: EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
         child: ListTile(
           leading: Icon(
             icon,
@@ -132,11 +132,11 @@ class DashboardCard extends StatelessWidget {
           ),
           title: Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             value,
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
         ),
       ),
